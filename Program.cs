@@ -5,20 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace MiniGameLoop
+namespace TextBasedRPG
 {
     internal class Program
     {
+            static char wall = '#';
+            static char avatar = '@';
+            static bool gameOver = false;
+            static int x = 30; 
+            static int y = 10;
+
+            static string path = @"map.txt";
+            static string[] MapRows;
         static void Main(string[] args)
         {
+            MapRows = File.ReadAllLines(path);
             Console.WriteLine("Text Based RPG");
             Console.WriteLine();
-
-            char avatar = '@';
-            bool gameOver = false;
-            int x = 30; 
-            int y = 10; 
-
 
             while (gameOver != true)
             {
@@ -27,25 +30,29 @@ namespace MiniGameLoop
                 if (input.Key == ConsoleKey.W)
                 {
                     PrintMap();
-                    y = y - 1;
+                    if (y == 8) y = 8;
+                    else y = y - 1;                   
                     if (y < 2) y = 2;
                 }
                 if (input.Key == ConsoleKey.S)
                 {
                     PrintMap();
-                    y = y + 1;
+                    if (y == 11) y = 11;
+                    else y = y + 1;
                     if (y > 20) y = 20;
                 }
                 if (input.Key == ConsoleKey.D)
                 {
                     PrintMap();
-                    x = x + 1;
+                    if (x == 36) x = 36;
+                    else x = x + 1;
                     if (x > 60) x = 60;
                 }
                 if (input.Key == ConsoleKey.A)
                 {
                     PrintMap();
-                    x = x - 1;
+                    if (x == 22) x = 22;
+                    else x = x - 1;
                     if (x < 0) x = 0;
                 }
                 Console.SetCursorPosition(x, y);
@@ -59,7 +66,6 @@ namespace MiniGameLoop
 
         static void PrintMap()
         {
-
             Console.SetCursorPosition(0, 2);
             string path = @"map.txt";
             string[] MapRows;
