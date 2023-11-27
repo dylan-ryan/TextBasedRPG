@@ -15,9 +15,11 @@ namespace TextBasedRPG
         static char avatar = '@';
         static bool gameOver = false;
 
-        static string path = @"map.txt";
         static void Main(string[] args)
         {
+            string path = @"map.txt";
+            string mapTiles;
+            mapTiles = File.ReadAllText(path);
             int x = 30;
             int y = 10;
             Console.CursorVisible = false;
@@ -25,6 +27,7 @@ namespace TextBasedRPG
             Console.WriteLine();
             LoadMap();
             Console.ReadKey();
+            
             while (gameOver != true)
             {
                 ConsoleKeyInfo input;
@@ -33,7 +36,7 @@ namespace TextBasedRPG
                 {
 
                     LoadMap();
-                    if ()
+                   
 
                     y = y - 1;
                     if (y <= 2) y = 3;
@@ -59,6 +62,7 @@ namespace TextBasedRPG
                 Console.SetCursorPosition(x, y);
                 Console.WriteLine(avatar);
             }
+            
 
             Console.WriteLine();
             Console.WriteLine("Press any key to exit...");
