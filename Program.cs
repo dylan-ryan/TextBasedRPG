@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
+using System.IO; // File.*
 using System.Threading;
 using System.Web;
 
@@ -14,53 +14,22 @@ namespace TextBasedRPG
 
         static char avatar = '@';
         static bool gameOver = false;
-
+        static int x = 30;
+        static int y = 10;
+        static char[,] map;
+        
         static void Main(string[] args)
         {
-            string path = @"map.txt";
-            string mapTiles;
-            mapTiles = File.ReadAllText(path);
-            int x = 30;
-            int y = 10;
             Console.CursorVisible = false;
             Console.WriteLine("Text Based RPG");
             Console.WriteLine();
             LoadMap();
-            Console.ReadKey();
+
+            //if (map[newX,newY] == '#')
             
             while (gameOver != true)
             {
-                ConsoleKeyInfo input;
-                input = Console.ReadKey(true);
-                if (input.Key == ConsoleKey.W)
-                {
-
-                    LoadMap();
-                   
-
-                    y = y - 1;
-                    if (y <= 2) y = 3;
-                }
-                if (input.Key == ConsoleKey.S)
-                {
-                    LoadMap();
-                    y = y + 1;
-                    if (y > 21) y = 21;
-                }
-                if (input.Key == ConsoleKey.D)
-                {
-                    LoadMap();
-                    x = x + 1;
-                    if (x > 60) x = 60;
-                }
-                if (input.Key == ConsoleKey.A)
-                {
-                    LoadMap();
-                    x = x - 1;
-                    if (x < 0) x = 0;
-                }
-                Console.SetCursorPosition(x, y);
-                Console.WriteLine(avatar);
+                CharacterController();
             }
             
 
@@ -69,20 +38,60 @@ namespace TextBasedRPG
             Console.ReadKey();
         }
 
+        static void CharacterController()
+        {        
+               ConsoleKeyInfo input;
+               input = Console.ReadKey(true);
+                    if (input.Key == ConsoleKey.W)
+                    {
+                        if (map[x, y] != '#')
+                        {
+                            LoadMap();
+                            y = y - 1;
+                            if (y <= 2) y = 3;
+                        }
+                        else
+                        {
+                            y = y + 1;
+                        }
+                    }
+                    if (input.Key == ConsoleKey.S)
+                    {
+                        LoadMap();
+                        y = y + 1;
+                        if (y > 19) y = 19;
+                    }
+                    if (input.Key == ConsoleKey.D)
+                    {
+                        LoadMap();
+                        x = x + 1;
+                        if (x > 60) x = 60;
+                    }
+                    if (input.Key == ConsoleKey.A)
+                    {
+                        LoadMap();
+                        x = x - 1;
+                        if (x < 1) x = 1;
+                    }
+              Console.SetCursorPosition(x, y);
+              Console.WriteLine(avatar);
+        }
         static void LoadMap()
         {
             Console.SetCursorPosition(0, 2);
             string path = @"map.txt";
             string[] MapRows;
             MapRows = File.ReadAllLines(path);
-            for (int i = 0; i < MapRows.Length; i++)
+            int width = MapRows[0].Length;
+            int height = MapRows.Length;
+            map = new char[width, height];
+            for (int y = 0; y < height; y++)
             {
-                string MapRow = MapRows[i];
-                for (int j = 0; j < MapRow.Length; j++)
+                for (int x = 0; x < width; x++)
                 {
                     Console.Write("");
-                    char tile = MapRow[j];
-                    Console.Write(tile);
+                    map[x,y] = MapRows[y][x];
+                    Console.Write(map[x,y]); // debug (display the info)
                 }
                 Console.WriteLine();
             }
