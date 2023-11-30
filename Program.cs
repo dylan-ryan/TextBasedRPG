@@ -16,24 +16,19 @@ namespace TextBasedRPG
         static int health = 3;
         static char avatar = '@';
         static bool gameOver = false;
-        static bool enemyDeath = false;
+        static Random r = new Random();
         static int x = 28;
         static int y = 8;
-
         static char enemy = '&';
         static int enX = 10;
         static int enY = 4;
-        
-        static Random r = new Random();
-
         static char[,] map;
         static void Main(string[] args)
         {
-
             Console.CursorVisible = false;
             LoadMap();
             //if (map[newX,newY] == '#')
-            
+
             while (gameOver != true)
             {
                 CharacterController();
@@ -53,8 +48,8 @@ namespace TextBasedRPG
 
         static void CharacterController()
         {
-
-
+            int rInt = r.Next(0, 2);
+            int rWASD = r.Next(0, 4);
             ConsoleKeyInfo input;
             Console.SetCursorPosition(x, y);
             Console.WriteLine(avatar);
@@ -78,29 +73,8 @@ namespace TextBasedRPG
                     Console.WriteLine(avatar);
                 }
                 Lava();
-                //enmy
-                if (enHealth > 0)
-                {
-                    enY = enY + 1;
-                    if (map[enX, enY] == ' ')
-                    {
-                        Console.SetCursorPosition(enX, enY);
-                        Console.WriteLine(enemy);
-                    }
-                    else if (map[enX, enY] == '#')
-                    {
-                        enY = enY - 1;
-                        Console.SetCursorPosition(enX, enY);
-                        Console.WriteLine(enemy);
-                    }
-                    if (enX == x && enY == y)
-                    {
-                        TakeDamage();
-                        LoadMap();
-                        y = y + 1;
-                        enY = enY - 1;
-                    }
-                }
+
+
             }
             if (input.Key == ConsoleKey.S || input.Key == ConsoleKey.DownArrow)
             {
@@ -117,27 +91,7 @@ namespace TextBasedRPG
                     y = y - 1;
                 }
                 Lava();
-                //enmy
-                if (enHealth > 0)
-                {
-                    enY = enY - 1;
-                    if (map[enX, enY] == ' ')
-                    {
-                        Console.SetCursorPosition(enX, enY);
-                        Console.WriteLine(enemy);
-                    }
-                    else if (map[enX, enY] == '#')
-                    {
-                        enY = enY + 1;
-                    }
-                    if (enX == x && enY == y)
-                    {
-                        TakeDamage();
-                        LoadMap();
-                        y = y - 1;
-                        enY = enY + 1;
-                    }
-                }
+
                 TakeDamage();
             }
             if (input.Key == ConsoleKey.D || input.Key == ConsoleKey.RightArrow)
@@ -156,28 +110,7 @@ namespace TextBasedRPG
                     x = x - 1;
                 }
                 Lava();
-                //enmy
-                if (enHealth > 0)
-                {
-                    enX = enX - 1;
-                    if (map[enX, enY] == ' ')
-                    {
-                        Console.SetCursorPosition(enX, enY);
-                        Console.WriteLine(enemy);
 
-                    }
-                    else if (map[enX, enY] == '#')
-                    {
-                        enX = enX + 1;
-                    }
-                    if (enX == x && enY == y)
-                    {
-                        TakeDamage();
-                        LoadMap();
-                        x = x - 1;
-                        enX = enX + 1;
-                    }
-                }
                 TakeDamage();
             }
             if (input.Key == ConsoleKey.A || input.Key == ConsoleKey.LeftArrow)
@@ -195,7 +128,14 @@ namespace TextBasedRPG
                     x = x + 1;
                 }
                 Lava();
-                //enmy
+
+
+                TakeDamage();
+            }
+            //ENEMY MOVEMENT//
+
+            if (rWASD == 0)
+            {
                 if (enHealth > 0)
                 {
                     enX = enX + 1;
@@ -208,20 +148,112 @@ namespace TextBasedRPG
                     {
                         enX = enX - 1;
                     }
-                    if (enX == x && enY == y)
+                }
+
+            }
+            if (rWASD == 1)
+            {
+                if (enHealth > 0)
+                {
+                    enY = enY + 1;
+                    if (map[enX, enY] == ' ')
                     {
-                        TakeDamage();
-                        LoadMap();
-                        x = x + 1;
-                        enX = enX - 1;
+                        Console.SetCursorPosition(enX, enY);
+                        Console.WriteLine(enemy);
+                    }
+                    else if (map[enX, enY] == '#')
+                    {
+                        enY = enY - 1;
+                        Console.SetCursorPosition(enX, enY);
+                        Console.WriteLine(enemy);
                     }
                 }
-                TakeDamage();
             }
-            Console.SetCursorPosition(0, 19);
-            Console.WriteLine("Your Health: " + health + "|" + "EnemyHealth: " + enHealth);
+            if (rWASD == 2)
+            {
+                if (enHealth > 0)
+                {
+                    enY = enY - 1;
+                    if (map[enX, enY] == ' ')
+                    {
+                        Console.SetCursorPosition(enX, enY);
+                        Console.WriteLine(enemy);
+                    }
+                    else if (map[enX, enY] == '#')
+                    {
+                        enY = enY + 1;
+                    }
+                }
+            }
+            if (rWASD == 3)
+            {
+                if (enHealth > 0)
+                {
+                    enX = enX - 1;
+                    if (map[enX, enY] == ' ')
+                    {
+                        Console.SetCursorPosition(enX, enY);
+                        Console.WriteLine(enemy);
+
+                    }
+                    else if (map[enX, enY] == '#')
+                    {
+                        enX = enX + 1;
+                    }
+                }
+            }
+            if (input.Key == ConsoleKey.A || input.Key == ConsoleKey.LeftArrow)
+            {
+                if (enX == x && enY == y)
+                {
+                    TakeDamage();
+                    LoadMap();
+                    x = x + 1;
+                    if (enHealth > 0)
+                        enX = enX - 1;
+                }
+
+            }
+            if (input.Key == ConsoleKey.D || input.Key == ConsoleKey.RightArrow)
+            {
+                if (enX == x && enY == y)
+                {
+                    TakeDamage();
+                    LoadMap();
+                    x = x - 1;
+                    if (enHealth > 0)
+                        enX = enX + 1;
+                }
+
+            }
+            if (input.Key == ConsoleKey.S || input.Key == ConsoleKey.DownArrow)
+            {
+
+                if (enX == x && enY == y)
+                {
+                    TakeDamage();
+                    LoadMap();
+                    y = y - 1;
+                    if (enHealth > 0)
+                        enY = enY + 1;
+                }
+            }
+            if (input.Key == ConsoleKey.W || input.Key == ConsoleKey.UpArrow)
+            {
+
+                if (enX == x && enY == y)
+                {
+                    TakeDamage();
+                    LoadMap();
+                    y = y + 1;
+                    if(enHealth > 0)
+                    enY = enY - 1;
+                }
+            }
+
+
         }
- 
+
 
         static void Lava()
         {
@@ -230,40 +262,41 @@ namespace TextBasedRPG
                 LoadMap();
                 health = health - 1;
             }
-            if(map[enX, enY] == 'L' || map[enX, enY] == 'A' || map[enX, enY] == 'V')
+            if (map[enX, enY] == 'L' || map[enX, enY] == 'A' || map[enX, enY] == 'V')
             {
-                if(enHealth > 0)
+                if (enHealth > 0)
                 {
-                LoadMap();
-                enHealth = enHealth - 1;
+                    LoadMap();
+                    enHealth = enHealth - 1;
 
                 }
             }
         }
         static void TakeDamage()
         {
-                if (enX == x && enY == y)
+            if (enX == x && enY == y)
+            {
+                if (enHealth > 0)
                 {
-                    if(enHealth > 0)
-                    {
-                     health = health - 1;
-                     enHealth = enHealth - 1;
-                    }
+                    health = health - 1;
+                    enHealth = enHealth - 1;
                 }
-                if (health <= 0)
-                {
+            }
+            if (health <= 0)
+            {
                 gameOver = true;
-                }
-                if(enHealth <= 0)
-                {
-                    enHealth = 0;
-                }
+            }
+            if (enHealth <= 0)
+            {
+                enHealth = 0;
+            }
         }
+
 
 
         static void LoadMap()
         {
-            Console.SetCursorPosition (0, 0);
+            Console.SetCursorPosition(0, 0);
             string path = @"map.txt";
             string[] MapRows;
             MapRows = File.ReadAllLines(path);
@@ -275,13 +308,34 @@ namespace TextBasedRPG
                 for (int x = 0; x < width; x++)
                 {
                     Console.Write("");
-                    map[x,y] = MapRows[y][x];
-                    Console.Write(map[x,y]); // debug (display the info)
+                    map[x, y] = MapRows[y][x];
+                    if (map[x, y] == ' ')
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkGreen;
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    }
+                    if (map[x, y] == '#')
+                    {
+                        Console.BackgroundColor = ConsoleColor.White;
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    if (map[x, y] == 'L' || map[x, y] == 'A' || map[x, y] == 'V')
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                    }
+                    else if (map[x, y] != ' ' && map[x, y] != '#' && map[x, y] != 'L' && map[x, y] != 'A' && map[x, y] != 'V')
+                    {
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                    }
+                    Console.Write(map[x, y]); // debug (display the info)
                 }
                 Console.WriteLine();
             }
+            Console.SetCursorPosition(0, height);
+            Console.BackgroundColor = ConsoleColor.Black; Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Your Health: " + health + "|" + "EnemyHealth: " + enHealth);
         }
-
-
     }
 }
