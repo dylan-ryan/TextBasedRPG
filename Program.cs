@@ -32,6 +32,7 @@ namespace TextBasedRPG
             while (gameOver != true)
             {
                 CharacterController();
+                Death();
             }
 
             while (gameOver == true)
@@ -92,7 +93,6 @@ namespace TextBasedRPG
                 }
                 Lava();
 
-                TakeDamage();
             }
             if (input.Key == ConsoleKey.D || input.Key == ConsoleKey.RightArrow)
             {
@@ -111,7 +111,6 @@ namespace TextBasedRPG
                 }
                 Lava();
 
-                TakeDamage();
             }
             if (input.Key == ConsoleKey.A || input.Key == ConsoleKey.LeftArrow)
             {
@@ -130,7 +129,6 @@ namespace TextBasedRPG
                 Lava();
 
 
-                TakeDamage();
             }
             //ENEMY MOVEMENT//
 
@@ -282,6 +280,10 @@ namespace TextBasedRPG
                     enHealth = enHealth - 1;
                 }
             }
+        }
+
+        static void Death()
+        {
             if (health <= 0)
             {
                 gameOver = true;
